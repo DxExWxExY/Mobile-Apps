@@ -2,6 +2,7 @@ package dxexwxexy.activities.Timer;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,12 +37,12 @@ public class TimerActivity extends AppCompatActivity {
     @SuppressLint("DefaultLocale")
     private void configureHandler() {
         handler = new Handler(msg -> {
-            long millis = msg.arg1;
-            timerDisplay.setText(String.format("%02d:%02d:%02d",
-                    TimeUnit.MILLISECONDS.toHours(millis),
-                    TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
-                    TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))));
-            return true;
+                long millis = msg.arg1;
+                timerDisplay.setText(String.format("%02d:%02d:%02d",
+                        TimeUnit.MILLISECONDS.toHours(millis),
+                        TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+                        TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))));
+                return true;
         });
     }
 
@@ -72,6 +73,11 @@ public class TimerActivity extends AppCompatActivity {
                 Message message = Message.obtain();
                 message.arg1 = (int) timer.elpsedTime();
                 handler.sendMessage(message);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }).start();
     }
