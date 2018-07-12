@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import dxexwxexy.activities.Intro.HelloWorld;
 import dxexwxexy.activities.R;
@@ -28,5 +29,10 @@ public class Menu extends AppCompatActivity {
         Button b = findViewById(R.id.b);
         b.setOnClickListener(e -> startActivity(new Intent(Menu.this, TimerActivity.class)));
         //Act 3
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "YEET", Toast.LENGTH_LONG).show();
     }
 }
