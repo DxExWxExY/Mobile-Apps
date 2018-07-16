@@ -1,13 +1,13 @@
 package dxexwxexy.activities.Timer;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
 
@@ -56,11 +56,14 @@ public class TimerActivity extends AppCompatActivity {
             startTimer();
             start.setEnabled(false);
             stop.setEnabled(true);
+            Toast.makeText(this, "Timer Started", Toast.LENGTH_SHORT).show();
         });
         stop.setOnClickListener(e -> {
             timer.stop();
+            handler.removeCallbacksAndMessages(null);
             start.setEnabled(true);
             stop.setEnabled(false);
+            Toast.makeText(this, "Timer Stopped", Toast.LENGTH_SHORT).show();
         });
         timerDisplay.setText(R.string.deafault_display);
     }
