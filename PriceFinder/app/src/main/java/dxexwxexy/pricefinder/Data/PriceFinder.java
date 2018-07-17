@@ -2,11 +2,7 @@ package dxexwxexy.pricefinder.Data;
 
 public class PriceFinder {
 
-    private String itemName;
-
-    PriceFinder(String itemName) {
-        this.itemName = itemName;
-    }
+    PriceFinder() { }
 
     /**
      * Simulates a price generation using a range and an initial price.

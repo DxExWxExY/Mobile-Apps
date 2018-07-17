@@ -1,13 +1,7 @@
 package dxexwxexy.pricefinder.Activities;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -17,27 +11,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import dxexwxexy.pricefinder.Data.Item;
 import dxexwxexy.pricefinder.R;
 
 public class ItemsView extends AppCompatActivity {
 
+    /***
+     * Fields used for UI manipulation.
+     */
     private ArrayList<Item> items;
     private SwipeRefreshLayout refreshLayout;
     private RecyclerViewAdapter adapter;
@@ -73,7 +64,7 @@ public class ItemsView extends AppCompatActivity {
      */
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.items_list);
-        adapter = new RecyclerViewAdapter(items, this);
+        adapter = new RecyclerViewAdapter(items);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -82,12 +73,9 @@ public class ItemsView extends AppCompatActivity {
      * Initializes the UI Components.
      */
     private void initUI() {
-        Log.d("---------------", "INIT UI CALLED");
         FloatingActionButton addItem = findViewById(R.id.add_fab);
-        addItem.setOnClickListener(view -> {
-            Snackbar.make(view, "Cannot Add Items... Yet", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        });
+        addItem.setOnClickListener(view -> Snackbar.make(view, "Cannot Add Items... Yet", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
         refreshLayout = findViewById(R.id.swipe_refresh);
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(true);
@@ -106,7 +94,6 @@ public class ItemsView extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d("---------------", "SAVE CALLED");
         outState.putParcelableArrayList("items", items);
     }
 
@@ -117,12 +104,8 @@ public class ItemsView extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.d("---------------", "RESTORE CALLED");
         items = savedInstanceState.getParcelableArrayList("items");
         initRecyclerView();
-        for (Item item : items) {
-            Log.d("=================", item.getCurrentPrice());
-        }
     }
 
     /**
@@ -135,16 +118,13 @@ public class ItemsView extends AppCompatActivity {
          * Fields used by the RecyclerViewer.
          */
         private ArrayList<Item> items;
-        private Context mContext;
 
         /***
          * Default Constructor
          * @param items ArrayList containing instances of Item.
-         * @param mContext App context.
          */
-        RecyclerViewAdapter(ArrayList<Item> items, Context mContext) {
+        RecyclerViewAdapter(ArrayList<Item> items) {
             this.items = items;
-            this.mContext = mContext;
         }
 
         /**
@@ -165,7 +145,7 @@ public class ItemsView extends AppCompatActivity {
          * @param holder
          * @param position
          */
-        @SuppressLint("NewApi")
+        @SuppressLint({"NewApi", "SetTextI18n"})
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             ViewHolder content = (ViewHolder) holder;

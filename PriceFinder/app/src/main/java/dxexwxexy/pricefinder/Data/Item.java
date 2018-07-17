@@ -7,27 +7,44 @@ import android.util.Log;
 import java.util.Locale;
 
 public class Item implements Parcelable {
+
+    /**
+     * Fields used by Item.
+     */
     private String name, url;
     private double initialPrice;
     private double currentPrice;
     private static PriceFinder priceFinder;
 
+    /**
+     * Default constructor.
+     * @param name Item name.
+     * @param url Item image URL.
+     * @param initialPrice Item initial price.
+     */
     public Item(String name, String url, double initialPrice) {
-        priceFinder = new PriceFinder(name);
+        priceFinder = new PriceFinder();
         this.name = name;
         this.url = url;
         this.initialPrice = initialPrice;
         this.currentPrice = initialPrice;
     }
 
+    /**
+     * Parcel constructor.
+     * @param in Parcel bundle.
+     */
     private Item(Parcel in) {
         name = in.readString();
         url = in.readString();
         initialPrice = in.readDouble();
         currentPrice = in.readDouble();
-        priceFinder = new PriceFinder(name);
+        priceFinder = new PriceFinder();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
         @Override
         public Item createFromParcel(Parcel in) {
@@ -40,6 +57,9 @@ public class Item implements Parcelable {
         }
     };
 
+    /**
+     * Getter methods.
+     */
     public String getName() {
         return name;
     }
@@ -56,12 +76,15 @@ public class Item implements Parcelable {
         return String.format(Locale.getDefault(), "%.0f", (((currentPrice - initialPrice) / initialPrice ) * 100));
     }
 
-    public void updateCurrentPrice() {
-        this.currentPrice = priceFinder.updatePrice(initialPrice);
-    }
-
     public String getURL() {
         return url;
+    }
+
+    /**
+     * Updates item current price using PriceFinder.
+     */
+    public void updateCurrentPrice() {
+        this.currentPrice = priceFinder.updatePrice(initialPrice);
     }
 
     /**
