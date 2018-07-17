@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -30,13 +31,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import dxexwxexy.pricefinder.Data.Item;
 import dxexwxexy.pricefinder.R;
 
 public class ItemsView extends AppCompatActivity {
 
-    private static ArrayList<Item> items;
+    private ArrayList<Item> items;
     private SwipeRefreshLayout refreshLayout;
     private RecyclerViewAdapter adapter;
 
@@ -80,6 +82,7 @@ public class ItemsView extends AppCompatActivity {
      * Initializes the UI Components.
      */
     private void initUI() {
+        Log.d("---------------", "INIT UI CALLED");
         FloatingActionButton addItem = findViewById(R.id.add_fab);
         addItem.setOnClickListener(view -> {
             Snackbar.make(view, "Cannot Add Items... Yet", Snackbar.LENGTH_LONG)
@@ -103,6 +106,7 @@ public class ItemsView extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.d("---------------", "SAVE CALLED");
         outState.putParcelableArrayList("items", items);
     }
 
@@ -113,7 +117,12 @@ public class ItemsView extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        Log.d("---------------", "RESTORE CALLED");
         items = savedInstanceState.getParcelableArrayList("items");
+        initRecyclerView();
+        for (Item item : items) {
+            Log.d("=================", item.getCurrentPrice());
+        }
     }
 
     /**
@@ -161,18 +170,21 @@ public class ItemsView extends AppCompatActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             ViewHolder content = (ViewHolder) holder;
             content.name.setText(items.get(position).getName());
-            content.initialPrice.setText(items.get(position).getInitialPrice());
-            content.currentPrice.setText(items.get(position).getCurrentPrice());
-            content.difference.setText(items.get(position).getDifference());
+            content.initialPrice.setText("$"+items.get(position).getInitialPrice());
+            content.currentPrice.setText("$"+items.get(position).getCurrentPrice());
             Picasso.get().load(items.get(position).getURL()).into(content.itemIcon);
             if (Integer.parseInt(items.get(position).getDifference()) <= 0) {
-                content.difference.setTextColor(getColor(R.color.green));
+                content.difference.setBackgroundColor(getColor(R.color.green));
+                content.difference.setText(items.get(position).getDifference()+"%");
             } else if (Integer.parseInt(items.get(position).getDifference()) <= 20) {
-                content.difference.setTextColor(getColor(R.color.yellow));
+                content.difference.setBackgroundColor(getColor(R.color.yellow));
+                content.difference.setText("+"+items.get(position).getDifference()+"%");
             } else if (Integer.parseInt(items.get(position).getDifference()) <= 40) {
-                content.difference.setTextColor(getColor(R.color.orange));
+                content.difference.setBackgroundColor(getColor(R.color.orange));
+                content.difference.setText("+"+items.get(position).getDifference()+"%");
             } else  {
-                content.difference.setTextColor(getColor(R.color.red));
+                content.difference.setBackgroundColor(getColor(R.color.red));
+                content.difference.setText("+"+items.get(position).getDifference()+"%");
             }
         }
 

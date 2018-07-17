@@ -2,6 +2,7 @@ package dxexwxexy.pricefinder.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.Locale;
 
@@ -19,15 +20,15 @@ public class Item implements Parcelable {
         this.currentPrice = initialPrice;
     }
 
-    protected Item(Parcel in) {
+    private Item(Parcel in) {
         name = in.readString();
         url = in.readString();
         initialPrice = in.readDouble();
         currentPrice = in.readDouble();
-        priceFinder = new PriceFinder(url);
+        priceFinder = new PriceFinder(name);
     }
 
-    public static final Creator<Item> CREATOR = new Creator<Item>() {
+    public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
         @Override
         public Item createFromParcel(Parcel in) {
             return new Item(in);
@@ -63,10 +64,6 @@ public class Item implements Parcelable {
         return url;
     }
 
-    public String toString() {
-        return getName()+","+getURL()+","+getInitialPrice()+","+getCurrentPrice();
-    }
-
     /**
      * Describe the kinds of special objects contained in this Parcelable
      * instance's marshaled representation. For example, if the object will
@@ -79,7 +76,7 @@ public class Item implements Parcelable {
      */
     @Override
     public int describeContents() {
-        return 0;
+        return hashCode();
     }
 
     /**
@@ -95,5 +92,6 @@ public class Item implements Parcelable {
         dest.writeString(url);
         dest.writeDouble(initialPrice);
         dest.writeDouble(currentPrice);
+        Log.d("++=++++++++++++++++=", "WRITTEN");
     }
 }
