@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 
+import dxexwxexy.activities.GradeViewer.GradeLogin;
 import dxexwxexy.activities.Intro.HelloWorld;
 import dxexwxexy.activities.R;
 import dxexwxexy.activities.Timer.TimerActivity;
@@ -29,6 +30,8 @@ public class Menu extends AppCompatActivity {
         Button b = findViewById(R.id.b);
         b.setOnClickListener(e -> startActivity(new Intent(Menu.this, TimerActivity.class)));
         //Act 3
+        Button c = findViewById(R.id.c);
+        c.setOnClickListener(e -> startActivity(new Intent(Menu.this, GradeLogin.class)));
     }
 
     @Override

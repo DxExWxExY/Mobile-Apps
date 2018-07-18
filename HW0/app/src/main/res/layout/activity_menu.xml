@@ -40,7 +40,7 @@
         android:layout_marginRight="24dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="16dp"
-        android:text="Act 3"
+        android:text="Grades"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/b"
         app:layout_constraintTop_toTopOf="parent" />
