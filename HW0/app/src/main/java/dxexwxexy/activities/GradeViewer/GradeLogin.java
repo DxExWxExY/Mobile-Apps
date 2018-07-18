@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -11,7 +12,7 @@ import dxexwxexy.activities.R;
 
 public class GradeLogin extends AppCompatActivity {
 
-    EditText user, password;
+    AutoCompleteTextView user, password;
     Button login;
 
     @Override

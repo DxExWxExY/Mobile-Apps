@@ -1,12 +1,14 @@
 package dxexwxexy.pricefinder.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +52,7 @@ public class ItemsView extends AppCompatActivity {
         initUI();
     }
 
+
     /***
      * Method to simulate data read.
      */
@@ -74,8 +79,21 @@ public class ItemsView extends AppCompatActivity {
      */
     private void initUI() {
         FloatingActionButton addItem = findViewById(R.id.add_fab);
-        addItem.setOnClickListener(view -> Snackbar.make(view, "Cannot Add Items... Yet", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        addItem.setOnClickListener(view -> {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(ItemsView.this);
+            View mView = getLayoutInflater().inflate(R.layout.add_dialog, null);
+            EditText name = mView.findViewById(R.id.add_name);
+            EditText price = mView.findViewById(R.id.add_price);
+            EditText url = mView.findViewById(R.id.add_url);
+            Button add = mView.findViewById(R.id.add_item);
+            mBuilder.setView(mView);
+            AlertDialog dialog = mBuilder.create();
+            dialog.show();
+            add.setOnClickListener(v -> {
+                items.add(new Item(name.getText().toString(), url.getText().toString(), Double.parseDouble(price.getText().toString())));
+                dialog.dismiss();
+            });
+        });
         refreshLayout = findViewById(R.id.swipe_refresh);
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(true);

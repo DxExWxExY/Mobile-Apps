@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="dxexwxexy.activities.GradeViewer.GradeLogin">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
