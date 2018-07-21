@@ -11,6 +11,7 @@ import dxexwxexy.activities.Intro.HelloWorld;
 import dxexwxexy.activities.R;
 import dxexwxexy.activities.Timer.TimerActivity;
 import dxexwxexy.activities.Tuition.TuitionCalculatorActivity;
+import dxexwxexy.activities.Unit.ConversionActivity;
 
 public class Menu extends AppCompatActivity {
 
@@ -36,6 +37,9 @@ public class Menu extends AppCompatActivity {
         //
         Button d = findViewById(R.id.d);
         d.setOnClickListener(e -> startActivity(new Intent(Menu.this, TuitionCalculatorActivity.class)));
+        //
+        Button e = findViewById(R.id.e);
+        e.setOnClickListener(x -> startActivity(new Intent(Menu.this, ConversionActivity.class)));
     }
 
     @Override

@@ -105,7 +105,7 @@ public class TimerActivity extends AppCompatActivity {
             stop.setEnabled(false);
             Toast.makeText(this, "Timer Stopped", Toast.LENGTH_SHORT).show();
         });
-        timerDisplay.setText(R.string.deafault_display);
+        timerDisplay.setText(R.string.default_display);
     }
 
     private void startTimer() {

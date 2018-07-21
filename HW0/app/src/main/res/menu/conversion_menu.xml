@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/ftom"
+        android:title="Feet to Meters" />
+    <item
+        android:id="@+id/itoc"
+        android:title="Inches to CentimetersItem" />
+    <item
+        android:id="@+id/ptog"
+        android:title="Pounds to Grams" />
+    <item
+        android:id="@+id/quit"
+        android:title="Quit" />
+</menu>

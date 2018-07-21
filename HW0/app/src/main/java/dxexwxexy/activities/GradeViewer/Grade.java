@@ -48,5 +48,10 @@ public class Grade {
             this.max = max;
             this.earned = earned;
         }
+
+        @Override
+        public String toString() {
+            return name + " " + max + " " + earned;
+        }
     }
 }

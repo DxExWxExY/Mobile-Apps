@@ -28,7 +28,9 @@
         <activity android:name=".Timer.TimerActivity" />
         <activity android:name=".GradeViewer.GradeLogin" />
         <activity android:name=".GradeViewer.GradeViewer" />
-        <activity android:name=".Tuition.TuitionCalculatorActivity"></activity>
+        <activity android:name=".Tuition.TuitionCalculatorActivity" />
+        <activity android:name=".ListView.ListActivity" />
+        <activity android:name=".Unit.ConversionActivity"></activity>
     </application>
 
 </manifest>

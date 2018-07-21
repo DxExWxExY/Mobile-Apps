@@ -29,6 +29,7 @@ public class TuitionCalculatorActivity extends AppCompatActivity {
                 TextView bill = findViewById(R.id.result);
                 if (!hours.getText().toString().equals("")) {
                     Tuition tuition = new Tuition(Integer.parseInt(hours.getText().toString()), onResidencySelected(), onLevelSelected());
+                    bill.setText("");
                     bill.append("Bill");
                     bill.append("\nTuition Cost: $" + tuition.getTuition());
                     bill.append("\nFees Cost: $" + tuition.getFees());
@@ -65,7 +66,7 @@ public class TuitionCalculatorActivity extends AppCompatActivity {
             case R.id.out_state:
                 return Tuition.OUT_STATE;
         }
-        return -2;
+        return -1;
     }
 
 }

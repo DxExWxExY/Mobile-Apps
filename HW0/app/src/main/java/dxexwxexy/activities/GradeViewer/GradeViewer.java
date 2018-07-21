@@ -5,19 +5,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dxexwxexy.activities.R;
 
 public class GradeViewer extends AppCompatActivity {
 
-    TextView grades;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grade_viewer);
-        grades = findViewById(R.id.grade_view);
         Intent data = getIntent();
         String user = data.getStringExtra("user");
         String password = data.getStringExtra("password");
@@ -25,18 +28,18 @@ public class GradeViewer extends AppCompatActivity {
             @Override
             public void onGrade(String date, Grade grade) {
                 runOnUiThread(() -> {
-                    grades.append(date+" "+grade.grade+"\n");
-                    for (Grade.Score score : grade.scores()) {
-                        grades.append(score.name + " " + score.earned + " " + score.max + "\n");
-                    }
+                    TextView grades = findViewById(R.id.grades_data);
+                    grades.setText("Grade is " + grade.grade);
+                    ListView listView = findViewById(R.id.list_view);
+                    ArrayAdapter<Grade.Score> arrayAdapter;
+                    arrayAdapter = new ArrayAdapter<Grade.Score>(GradeViewer.this, R.layout.grade_container, R.id.grade_name, grade.scores());
+                    listView.setAdapter(arrayAdapter);
                 });
             }
 
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onError(String msg) {
-                grades.setText("User Not Found");
-                grades.setTextColor(getColor(R.color.red));
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
