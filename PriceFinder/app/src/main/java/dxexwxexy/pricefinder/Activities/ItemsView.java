@@ -2,8 +2,10 @@ package dxexwxexy.pricefinder.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dxexwxexy.pricefinder.Data.Item;
 import dxexwxexy.pricefinder.R;
@@ -126,6 +130,59 @@ public class ItemsView extends AppCompatActivity {
         initRecyclerView();
     }
 
+    public class ItemListView extends ArrayAdapter<Item> {
+
+        class ViewHolder {
+
+            /**
+             * Fields used by the item_container layout.
+             */
+            TextView name, initialPrice, currentPrice, difference;
+            ImageView itemIcon;
+            ConstraintLayout parentLayout;
+
+            /***
+             * Default Constructor
+             * @param itemView View Containing the holder views.
+             */
+            ViewHolder(View itemView) {
+                name = itemView.findViewById(R.id.item_name);
+                initialPrice = itemView.findViewById(R.id.initial_price);
+                currentPrice = itemView.findViewById(R.id.current_price);
+                difference = itemView.findViewById(R.id.difference);
+                itemIcon = itemView.findViewById(R.id.item_icon);
+                parentLayout = itemView.findViewById(R.id.item_holder);
+                registerForContextMenu(parentLayout);
+            }
+
+            public void setData(String name, String initialPrice, String currentPrice, String difference) {
+                this.name.setText(name);
+                // TODO: 7/21/2018 finish listview implmentation
+            }
+        }
+
+        /**
+         * Constructor
+         *
+         * @param context  The current context.
+         * @param items  The objects to represent in the ListView.
+         */
+        public ItemListView(@NonNull Context context, @NonNull List<Item> items) {
+            super(context, R.layout.item_container, items);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            Item item = items.get(position);
+            assert convertView != null;
+            ViewHolder viewHolder = new ViewHolder(convertView);
+            viewHolder.setData();
+
+            return convertView;
+        }
+    }
+
     /**
      * Class required to use a RecyclerViewer.
      *
@@ -219,6 +276,7 @@ public class ItemsView extends AppCompatActivity {
                 difference = itemView.findViewById(R.id.difference);
                 itemIcon = itemView.findViewById(R.id.item_icon);
                 parentLayout = itemView.findViewById(R.id.item_holder);
+                registerForContextMenu(parentLayout);
             }
         }
     }
