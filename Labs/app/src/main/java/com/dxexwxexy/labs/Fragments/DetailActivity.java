@@ -1,8 +1,10 @@
-package com.dxexwxexy.labs;
+package com.dxexwxexy.labs.Fragments;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.dxexwxexy.labs.R;
 
 public class DetailActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.dxexwxexy.labs;
+package com.dxexwxexy.labs.Fragments;
 
 import java.util.ArrayList;
 import java.util.Collections;

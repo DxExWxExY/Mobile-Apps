@@ -7,7 +7,7 @@
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listFragment"
-        android:name="com.dxexwxexy.labs.PatternListFragment"
+        android:name="com.dxexwxexy.labs.Fragments.PatternListFragment"
         android:layout_width="296dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/detailFragment"
@@ -16,7 +16,7 @@
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/detailFragment"
-        android:name="com.dxexwxexy.labs.PatternDetailFragment"
+        android:name="com.dxexwxexy.labs.Fragments.PatternDetailFragment"
         android:layout_width="307dp"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"

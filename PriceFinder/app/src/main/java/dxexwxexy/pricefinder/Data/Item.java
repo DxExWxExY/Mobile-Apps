@@ -2,11 +2,13 @@ package dxexwxexy.pricefinder.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.Comparator;
 import java.util.Locale;
 
-public class Item implements Parcelable {
+public class Item implements Parcelable, Comparable<Item> {
 
     /**
      * Fields used by Item.
@@ -15,6 +17,18 @@ public class Item implements Parcelable {
     private double initialPrice;
     private double currentPrice;
     private static PriceFinder priceFinder;
+    private Boolean isSelected;
+
+    /**
+     * Fields for sorting and website.
+     */
+    private static final String SITE = "https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=";
+    public static final Comparator<Item> COMPARE_BY_NAME = (a, b) -> a.getName().toLowerCase().compareTo(b.getName().toLowerCase());
+    public static final Comparator<Item> COMPARE_BY_DIFF = (a, b) -> a.getDifference().compareTo(b.getDifference());
+    public static final Comparator<Item> COMPARE_BY_CURR = (a, b) -> {
+        return Double.compare(Double.parseDouble(a.getCurrentPrice()), Double.parseDouble(b.getCurrentPrice()));
+    };
+
 
     /**
      * Default constructor.
@@ -28,6 +42,8 @@ public class Item implements Parcelable {
         this.url = url;
         this.initialPrice = initialPrice;
         this.currentPrice = initialPrice;
+        this.isSelected = false;
+
     }
 
     /**
@@ -57,6 +73,10 @@ public class Item implements Parcelable {
         }
     };
 
+    public Boolean getIsSelected() {
+        return isSelected;
+    }
+
     /**
      * Getter methods.
      */
@@ -78,6 +98,19 @@ public class Item implements Parcelable {
 
     public String getURL() {
         return url;
+    }
+
+    public String getSite() {
+        return SITE+getName().replace(' ', '+');
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Item) {
+            Item that = (Item) obj;
+            return this.name.equals(that.name) && this.url.equals(that.url);
+        }
+        return false;
     }
 
     /**
@@ -115,6 +148,65 @@ public class Item implements Parcelable {
         dest.writeString(url);
         dest.writeDouble(initialPrice);
         dest.writeDouble(currentPrice);
-        Log.d("++=++++++++++++++++=", "WRITTEN");
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.initialPrice = price;
+        currentPrice = price;
+    }
+
+    public void setURL(String url) {
+        this.url = url;
+    }
+
+    public void setSelected(Boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    /**
+     * Compares this object with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object.
+     * <p>
+     * <p>The implementor must ensure <tt>sgn(x.compareTo(y)) ==
+     * -sgn(y.compareTo(x))</tt> for all <tt>x</tt> and <tt>y</tt>.  (This
+     * implies that <tt>x.compareTo(y)</tt> must throw an exception iff
+     * <tt>y.compareTo(x)</tt> throws an exception.)
+     * <p>
+     * <p>The implementor must also ensure that the relation is transitive:
+     * <tt>(x.compareTo(y)&gt;0 &amp;&amp; y.compareTo(z)&gt;0)</tt> implies
+     * <tt>x.compareTo(z)&gt;0</tt>.
+     * <p>
+     * <p>Finally, the implementor must ensure that <tt>x.compareTo(y)==0</tt>
+     * implies that <tt>sgn(x.compareTo(z)) == sgn(y.compareTo(z))</tt>, for
+     * all <tt>z</tt>.
+     * <p>
+     * <p>It is strongly recommended, but <i>not</i> strictly required that
+     * <tt>(x.compareTo(y)==0) == (x.equals(y))</tt>.  Generally speaking, any
+     * class that implements the <tt>Comparable</tt> interface and violates
+     * this condition should clearly indicate this fact.  The recommended
+     * language is "Note: this class has a natural ordering that is
+     * inconsistent with equals."
+     * <p>
+     * <p>In the foregoing description, the notation
+     * <tt>sgn(</tt><i>expression</i><tt>)</tt> designates the mathematical
+     * <i>signum</i> function, which is defined to return one of <tt>-1</tt>,
+     * <tt>0</tt>, or <tt>1</tt> according to whether the value of
+     * <i>expression</i> is negative, zero or positive.
+     *
+     * @param that the object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object
+     * is less than, equal to, or greater than the specified object.
+     * @throws NullPointerException if the specified object is null
+     * @throws ClassCastException   if the specified object's type prevents it
+     *                              from being compared to this object.
+     */
+    @Override
+    public int compareTo(@NonNull Item that) {
+        return this.getDifference().compareTo(that.getDifference());
     }
 }

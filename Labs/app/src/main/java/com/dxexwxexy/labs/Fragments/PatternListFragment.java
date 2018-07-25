@@ -1,4 +1,4 @@
-package com.dxexwxexy.labs;
+package com.dxexwxexy.labs.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
