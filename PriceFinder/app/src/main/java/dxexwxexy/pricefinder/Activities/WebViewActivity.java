@@ -3,18 +3,14 @@ package dxexwxexy.pricefinder.Activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
-import dxexwxexy.pricefinder.Data.Item;
 import dxexwxexy.pricefinder.R;
 
 public class WebViewActivity extends AppCompatActivity {
@@ -67,6 +63,7 @@ public class WebViewActivity extends AppCompatActivity {
                 android.content.ClipData clip = android.content.ClipData.newPlainText("Link Copied", webView.getUrl());
                 assert clipboard != null;
                 clipboard.setPrimaryClip(clip);
+                return true;
             case R.id.share:
                 try {
                     Intent i = new Intent(Intent.ACTION_SEND);

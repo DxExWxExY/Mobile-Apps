@@ -1,9 +1,9 @@
 package dxexwxexy.pricefinder.Data;
 
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.Comparator;
 import java.util.Locale;
@@ -13,37 +13,38 @@ public class Item implements Parcelable, Comparable<Item> {
     /**
      * Fields used by Item.
      */
-    private String name, url;
-    private double initialPrice;
-    private double currentPrice;
-    private static PriceFinder priceFinder;
+    private String name, url, store;
+    private double initialPrice, currentPrice;
+    private ItemDataFinder itemDataFinder;
     private Boolean isSelected;
 
     /**
      * Fields for sorting and website.
      */
-    private static final String SITE = "https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=";
     public static final Comparator<Item> COMPARE_BY_NAME = (a, b) -> a.getName().toLowerCase().compareTo(b.getName().toLowerCase());
     public static final Comparator<Item> COMPARE_BY_DIFF = (a, b) -> a.getDifference().compareTo(b.getDifference());
-    public static final Comparator<Item> COMPARE_BY_CURR = (a, b) -> {
-        return Double.compare(Double.parseDouble(a.getCurrentPrice()), Double.parseDouble(b.getCurrentPrice()));
-    };
+    public static final Comparator<Item> COMPARE_BY_CURR = (a, b) -> Double.compare(Double.parseDouble(a.getCurrentPrice()), Double.parseDouble(b.getCurrentPrice()));
 
+    Item(String name, String url, double initialPrice, double currentPrice) {
+        itemDataFinder = new ItemDataFinder(url);
+        this.name = name;
+        this.url = url;
+        this.initialPrice = initialPrice;
+        this.currentPrice = itemDataFinder.getCurrentPrice();
+        this.store = itemDataFinder.getStore();
+    }
 
     /**
      * Default constructor.
      * @param name Item name.
      * @param url Item image URL.
-     * @param initialPrice Item initial price.
      */
-    public Item(String name, String url, double initialPrice) {
-        priceFinder = new PriceFinder();
+    public Item(String name, String url) {
+        itemDataFinder = new ItemDataFinder(url);
         this.name = name;
         this.url = url;
-        this.initialPrice = initialPrice;
-        this.currentPrice = initialPrice;
         this.isSelected = false;
-
+        this.store = itemDataFinder.getStore();
     }
 
     /**
@@ -55,7 +56,7 @@ public class Item implements Parcelable, Comparable<Item> {
         url = in.readString();
         initialPrice = in.readDouble();
         currentPrice = in.readDouble();
-        priceFinder = new PriceFinder();
+        itemDataFinder = new ItemDataFinder(url);
     }
 
     /**
@@ -73,10 +74,6 @@ public class Item implements Parcelable, Comparable<Item> {
         }
     };
 
-    public Boolean getIsSelected() {
-        return isSelected;
-    }
-
     /**
      * Getter methods.
      */
@@ -85,23 +82,56 @@ public class Item implements Parcelable, Comparable<Item> {
     }
 
     public String getInitialPrice() {
-        return String.valueOf(initialPrice);
+        return String.format(Locale.getDefault(), "%.2f", initialPrice);
     }
 
     public String getCurrentPrice() {
         return String.format(Locale.getDefault(), "%.2f", currentPrice);
     }
 
+    public String getStore() {
+        return store;
+    }
+
+    public Boolean getIsSelected() {
+        return isSelected;
+    }
+
     public String getDifference() {
-        return String.format(Locale.getDefault(), "%.0f", (((currentPrice - initialPrice) / initialPrice ) * 100));
+        int difference = (int) (((currentPrice - initialPrice) / initialPrice ) * 100);
+        if (Double.isNaN(difference)){
+            return String.format(Locale.getDefault(), "%d", 0);
+        } else {
+            return String.format(Locale.getDefault(), "%d", difference);
+        }
     }
 
     public String getURL() {
         return url;
     }
 
-    public String getSite() {
-        return SITE+getName().replace(' ', '+');
+    public boolean isFetched() {
+        return itemDataFinder.isFetched();
+    }
+
+    /**
+     * Updates item current price using ItemDataFinder.
+     */
+    public void updateCurrentPrice() {
+        this.initialPrice = itemDataFinder.getInitialPrice();
+        this.currentPrice = itemDataFinder.getCurrentPrice();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setURL(String url) {
+        this.url = url;
+    }
+
+    public void setSelected(Boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
     @Override
@@ -111,13 +141,6 @@ public class Item implements Parcelable, Comparable<Item> {
             return this.name.equals(that.name) && this.url.equals(that.url);
         }
         return false;
-    }
-
-    /**
-     * Updates item current price using PriceFinder.
-     */
-    public void updateCurrentPrice() {
-        this.currentPrice = priceFinder.updatePrice(initialPrice);
     }
 
     /**
@@ -148,23 +171,6 @@ public class Item implements Parcelable, Comparable<Item> {
         dest.writeString(url);
         dest.writeDouble(initialPrice);
         dest.writeDouble(currentPrice);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(double price) {
-        this.initialPrice = price;
-        currentPrice = price;
-    }
-
-    public void setURL(String url) {
-        this.url = url;
-    }
-
-    public void setSelected(Boolean isSelected) {
-        this.isSelected = isSelected;
     }
 
     /**
@@ -209,4 +215,5 @@ public class Item implements Parcelable, Comparable<Item> {
     public int compareTo(@NonNull Item that) {
         return this.getDifference().compareTo(that.getDifference());
     }
+
 }
