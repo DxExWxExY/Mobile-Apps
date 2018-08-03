@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
@@ -81,11 +82,14 @@ public class ItemManager extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         done.setOnClickListener(e -> {
                             String ebay = "\\S+\\.ebay\\.\\S+";
                             String amazon = "\\S+\\.amazon\\.\\S+";
+                            String utep = "\\S+\\.utep\\.\\S+";
                             if (!editName.getText().toString().matches("")) {
-                                if (editURL.getText().toString().matches(ebay) || editURL.getText().toString().matches(amazon)) {
+                                if (editURL.getText().toString().matches(ebay) || editURL.getText().toString().matches(amazon) ||
+                                        editURL.getText().toString().matches(utep)) {
                                     itemDatabase.editItem(edit, editName.getText().toString(), editURL.getText().toString());
                                     edit.setName(editName.getText().toString());
                                     edit.setURL(editURL.getText().toString());
+                                    edit.setSelected(false);
                                     notifyDataSetChanged();
                                     dialog.dismiss();
                                 } else {
@@ -176,8 +180,6 @@ public class ItemManager extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         content.name.setText(items.get(position).getName());
         content.initialPrice.setText("$"+items.get(position).getInitialPrice());
         content.currentPrice.setText("$"+items.get(position).getCurrentPrice());
-        content.itemIcon.setImageResource(items.get(position).getStore().equals("amazon") ?
-                R.drawable.ic_amazon : R.drawable.ic_ebay);
         if (Integer.parseInt(items.get(position).getDifference()) <= 0) {
             content.difference.setBackgroundColor(context.getColor(R.color.green));
             content.difference.setText(items.get(position).getDifference()+"%");
@@ -285,10 +287,6 @@ public class ItemManager extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return fetchDone;
     }
 
-    public void resetFetch() {
-
-    }
-
     /**
      * Instance used by RecyclerViewer.
      */
@@ -318,6 +316,17 @@ public class ItemManager extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         void setItem(Item item) {
             this.item = item;
+            switch (item.getStore()) {
+                case "amazon":
+                    this.itemIcon.setImageResource(R.drawable.ic_amazon);
+                    break;
+                case "ebay":
+                    this.itemIcon.setImageResource(R.drawable.ic_ebay);
+                    break;
+                case "utep":
+                    this.itemIcon.setImageResource(R.drawable.ic_utep);
+                    break;
+            }
         }
     }
 }
